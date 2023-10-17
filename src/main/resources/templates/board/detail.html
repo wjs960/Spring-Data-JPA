@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>detail</title>
+</head>
+<body>
+<!-- 게시글-->
+<h2>게시글</h2>
+<table>
+    <tr>
+        <td> 제목 : <span th:text="${ board.title }"></span></td>
+    </tr>
+    <tr>
+
+        <td>작성자 | <span th:text="${ board.userId }"></span></td>
+        <td>작성일 | <span th:text="${ board.postedDate }"></span></td>
+    </tr>
+    <tr>
+        <td>내용</td>
+    </tr>
+    <tr>
+        <td><textarea th:text="${ board.boardContent }" readonly class="detailsBox"></textarea></td>
+    </tr>
+</table>
+<!-- 답변 -->
+<table>
+    <input id="boardCode" type="hidden" name="boardCode" th:value="${ board.boardCode }">
+    <tr>
+        <td>답변</td>
+    </tr>
+    <tr>
+        <td>
+            <textarea></textarea>
+        </td>
+        <td>
+            <input type="submit" value="답변작성">
+
+        </td>
+</table>
+<button onclick="location.href='/main'">돌아가기</button>
+<button type="submit" onclick="modifyButton()">수정하기</button>
+<button type="submit" onclick="deleteButton()">삭제하기</button>
+<script>
+    /* 게시글 수정 */
+     function modifyButton (){
+        const boardCode = document.getElementById("boardCode").value;
+        location.href = "/board/modify/" + boardCode;
+    };
+    /* 게시글 삭제 */
+    function deleteButton (){
+
+        const boardCode = '[[${board.boardCode}]]';
+        if(!confirm('정말로 게시글을 삭제하시겠습니까?')) {
+            return false;
+        }
+
+        const formHtml = `
+                    <form id="deleteForm" action="/board/delete" method="post">
+                        <input type="hidden" id="boardCode" name="boardCode" value="${boardCode}"/>
+                    </form>
+                `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        document.getElementById('deleteForm').submit();
+    };
+
+
+</script>
+</body>
+</html>

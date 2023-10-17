@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>selectCode</title>
+</head>
+<body>
+    <h1>수정/조회 할 코드를 입력 하세요.</h1>
+    <form id="boardForm" action="/modify/{boardNo}" method="get">
+        <label>수정/조회 할 코드: <input type="number" id="boardNo" name="boardNo"></label>
+        &emsp;<input type="submit" name="submitArtistSearchCode">
+    </form>
+
+    <h1>게시글 전체 검색 JPQL</h1>
+    <form action="/board/searchAll" method="get">
+        <input type="hidden" name="currentPage" value="1">
+        <input type="search" name="searchAll" placeholder="제목 또는 게시글 내용 입력해주세요."/>
+        <button type="submit">
+            <span>검색</span>
+        </button>
+    </form>
+
+
+<script>
+    document.getElementById("boardForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const boardNoInput = document.getElementById("boardNo");
+        const boardNoValue = boardNoInput.value;
+
+        const url = `/board/${boardNoValue}`;
+
+        window.location.href = url;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>searchResult</title>
+</head>
+<body>
+<h1>쿼리메소드</h1>
+
+<table>
+    <th:p><button type="button" onclick="location.href='/board/regist'">글등록</button></th:p>
+    <th:p><button type="button" onclick="location.href='/main'">목록으로</button></th:p>
+    <br>
+    <tr>
+        <th>No</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성일</th>
+        <th>조회수</th>
+    </tr>
+    <tr th:each="board : ${ boardList }">
+        <td th:text="${ board.boardCode }"></td>
+        <td th:text="${ board.title }"></td>
+        <td th:text="${ board.userId }"></td>
+        <td th:text="${ board.postedDate }"></td>
+        <td th:text="${ board.viewCount }"></td>
+    </tr>
+</table>
+</body>
+</html>

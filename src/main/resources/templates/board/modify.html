@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>modify</title>
+</head>
+<body>
+<h2>게시글 수정</h2>
+<form action="/board/modify" method="post">
+    <table>
+        <tr>
+            <td>제목 <input type="text" name="title"></td>
+        </tr>
+        <tr>
+            <td>작성자 <input th:value="${board.userId}" disabled="disabled"/></td>
+            <td>작성일 | <span th:text="${ board.postedDate }"></span></td>
+        </tr>
+        <tr>
+            <td>내용</td>
+        </tr>
+        <tr>
+            <td>
+                <textarea name="boardContent" rows="22" cols="120"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <input type="hidden" name="boardCode" th:value="${board.boardCode}">
+    <div>
+        <button type="submit">수정하기</button>
+        <button type="button" onclick="location.href='/main'">돌아가기</button>
+    </div>
+</form>
+</body>
+</html>

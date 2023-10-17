@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>querymethod</title>
+</head>
+<body>
+  <!-- 검색창 -->
+  <h1>조회</h1>
+  <form action="/board/search" method="get">
+        <input type="hidden" name="currentPage" value="1">
+        <input type="search" name="searchWord" placeholder="검색어를 입력해주세요."/>
+        <button type="submit">
+          <span>검색</span>
+        </button>
+  </form>
+</body>
+</html>

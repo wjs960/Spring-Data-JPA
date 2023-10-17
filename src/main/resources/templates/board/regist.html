@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>board regist</title>
+</head>
+<body>
+
+<h2>게시글 작성</h2>
+    <form action="/board/regist" method="post">
+        <label>제목</label>
+        <div class="">
+            <input type="text" name="title" placeholder="제목을 입력해 주세요."/>
+        </div>
+
+        <label>이름</label>
+        <div class="">
+            <input type="text" name="refNickname" placeholder="작성자아이디" disabled="disabled"/>
+        </div>
+
+        <label>내용</label>
+        <div class="">
+            <textarea rows="22" cols="120" name="boardContent" placeholder="내용을 입력해 주세요." style="resize: none"></textarea>
+        </div>
+        <input type="hidden" name="userId" value="유저아이디">
+        <a href="/">뒤로가기</a>
+        <input type="submit" value="저장하기">
+    </form>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>게시글</h2>
+<table>
+  <tr>
+    <td> 제목 : <span th:text="${ board.title }"></span></td>
+  </tr>
+  <tr>
+
+    <td>작성자 | <span th:text="${ board.userId }"></span></td>
+    <td>작성일 | <span th:text="${ board.postedDate }"></span></td>
+  </tr>
+  <tr>
+    <td>내용</td>
+  </tr>
+  <tr>
+    <td><textarea th:text="${ board.boardContent }" readonly class="detailsBox"></textarea></td>
+  </tr>
+</table>
+<!-- 댓글 내용-->
+<div class="card">
+  <!-- 댓글 헤더-->
+  <div class="card-header">
+    <div>댓글(<span>0</span>)</div>
+  </div>
+
+  <!-- 댓글 내용 바디 -->
+  <div class="card">
+        <!-- 댓글 정보 여기에 -->
+        <textarea id="reply-content" rows="1"></textarea>
+        <button id="reply-btn" type="button" onclick="replySave()">등록</button>
+  </div>
+</div>
+<br/>
+<div class="card">
+  <div class="">댓글</div>
+  <ul>
+    <li>
+      <div>댓글 내용입니다.!.......................<span>작성자: ssarlength &nbsp;</span></div>
+      <div>
+        <button>수정</button><span> | </span>
+        <button>삭제</button>
+      </div>
+    </li>
+  </ul>
+</div>
+<script>
+  /*let commentIndex = {
+    init: function () {
+      $("#reply-btn").onclick(
+              this.replySave()
+      );
+    },*/
+     function replySave() {
+      let data = {
+        content: $("#reply-content").val(),
+      }
+      let boardId = $("#boardId").val();
+      console.log(data);
+      console.log(boardId);
+      $.ajax({
+        type: "POST",
+        url: `/board/${boardId}/reply`,
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "text"
+      }).done(function (res) {
+        alert("댓글작성이 완료되었습니다.");
+        location.href = `/board/${boardId}`;
+      }).fail(function (err) {
+        alert(JSON.stringify(err));
+      });
+  }
+</script>
+</body>
+</html>
