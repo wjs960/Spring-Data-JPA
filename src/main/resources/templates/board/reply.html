@@ -11,7 +11,6 @@
     <td> 제목 : <span th:text="${ board.title }"></span></td>
   </tr>
   <tr>
-
     <td>작성자 | <span th:text="${ board.userId }"></span></td>
     <td>작성일 | <span th:text="${ board.postedDate }"></span></td>
   </tr>
@@ -22,6 +21,7 @@
     <td><textarea th:text="${ board.boardContent }" readonly class="detailsBox"></textarea></td>
   </tr>
 </table>
+<input type="hidden" id="boardCode" th:value="${board.boardCode}">
 <!-- 댓글 내용-->
 <div class="card">
   <!-- 댓글 헤더-->
@@ -30,15 +30,15 @@
   </div>
 
   <!-- 댓글 내용 바디 -->
-  <div class="card">
+  <div>
         <!-- 댓글 정보 여기에 -->
-        <textarea id="reply-content" rows="1"></textarea>
-        <button id="reply-btn" type="button" onclick="replySave()">등록</button>
+        <textarea id="commentContent" rows="1"></textarea>
+        <button id="insertComment" type="button" onclick="submitComment()">등록</button>
   </div>
 </div>
 <br/>
-<div class="card">
-  <div class="">댓글</div>
+<div>
+  <div>댓글</div>
   <ul>
     <li>
       <div>댓글 내용입니다.!.......................<span>작성자: ssarlength &nbsp;</span></div>
@@ -50,32 +50,39 @@
   </ul>
 </div>
 <script>
-  /*let commentIndex = {
-    init: function () {
-      $("#reply-btn").onclick(
-              this.replySave()
-      );
-    },*/
-     function replySave() {
-      let data = {
-        content: $("#reply-content").val(),
-      }
-      let boardId = $("#boardId").val();
-      console.log(data);
-      console.log(boardId);
-      $.ajax({
-        type: "POST",
-        url: `/board/${boardId}/reply`,
-        data: JSON.stringify(data),
-        contentType: "application/json; charset=utf-8",
-        dataType: "text"
-      }).done(function (res) {
-        alert("댓글작성이 완료되었습니다.");
-        location.href = `/board/${boardId}`;
-      }).fail(function (err) {
-        alert(JSON.stringify(err));
+  const boardCode = document.getElementById("boardCode").value;
+
+  const submitComment = async () => {
+    const commentContent = document.getElementById("commentContent").value; // 댓글 내용을 가져옵니다.
+
+    console.log(boardCode);
+
+    console.log(commentContent);
+
+    try {
+      const response = await fetch('/board/comment', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        body:   {
+                  boardCode: boardCode,
+                  commentContent: commentContent
+                }
       });
-  }
+
+      if (response.ok) {
+        console.log('댓글이 작성되었습니다.');
+        // 댓글 작성 후 처리할 로직 추가
+      } else {
+        console.error('댓글 작성 실패');
+        // 댓글 작성 실패 처리할 로직 추가
+      }
+    } catch (error) {
+      console.error('오류 발생:', error);
+      // 오류 발생 시 처리할 로직 추가
+    }
+  };
 </script>
 </body>
 </html>

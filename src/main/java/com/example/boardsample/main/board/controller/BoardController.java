@@ -1,6 +1,7 @@
 package com.example.boardsample.main.board.controller;
 
 import com.example.boardsample.main.board.model.dto.BoardDTO;
+import com.example.boardsample.main.board.model.dto.CommentDTO;
 import com.example.boardsample.main.board.model.service.BoardService;
 import com.example.boardsample.main.common.Pagenation;
 import com.example.boardsample.main.common.PagingButton;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -106,5 +108,17 @@ public class BoardController {
         model.addAttribute("boardList", boardList);
 
         return "board/searchResult";
+    }
+
+    @PostMapping("comment")
+    public String saveComment(@RequestParam(value = "boardCode")String boardCode,
+                              @RequestParam(value = "commentContent")String commentContent){
+
+        System.out.println("댓글 파라미터 값 ? : " + commentContent);
+        System.out.println("댓글 파라미터 값 ? : " + boardCode);
+       // List<CommentDTO> commentList = boardService.commentNewPosting(newComment);
+
+
+        return "";
     }
 }

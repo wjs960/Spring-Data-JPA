@@ -1,8 +1,11 @@
 package com.example.boardsample.main.board.model.service;
 
 import com.example.boardsample.main.board.model.dto.BoardDTO;
+import com.example.boardsample.main.board.model.dto.CommentDTO;
 import com.example.boardsample.main.board.model.entity.Board;
+import com.example.boardsample.main.board.model.entity.Comment;
 import com.example.boardsample.main.board.model.repository.BoardRepogitory;
+import com.example.boardsample.main.board.model.repository.CommentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,18 +18,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
 
     private final BoardRepogitory boardRepogitory;
+    private final CommentRepository commentRepogitory;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public BoardService(BoardRepogitory boardRepogitory, ModelMapper modelMapper) {
+    public BoardService(BoardRepogitory boardRepogitory, ModelMapper modelMapper,CommentRepository commentRepogitory) {
         this.boardRepogitory = boardRepogitory;
         this.modelMapper = modelMapper;
+        this.commentRepogitory = commentRepogitory;
     }
     @Transactional
     public void boardRegist(BoardDTO boardDTO) {
@@ -90,4 +96,9 @@ public class BoardService {
         return boardList.stream().map(board -> modelMapper.map(board, BoardDTO.class)).collect(Collectors.toList());
     }
 
+    /*public List<CommentDTO> commentNewPosting(Map<String, Object> newComment) {
+
+
+        List<Comment> comment = commentRepogitory.save()
+    }*/
 }
