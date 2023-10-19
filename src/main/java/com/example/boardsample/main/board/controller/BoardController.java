@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,9 +37,13 @@ public class BoardController {
     @GetMapping("{boardCode}")
     public String findBoardByCode(@PathVariable int boardCode, Model model) {
         BoardDTO board = boardService.findBoardByCode(boardCode);
+        List<CommentDTO> commentList = boardService.findCommentList();
+        System.out.println(commentList);
+
+        model.addAttribute("commentList", commentList);
         model.addAttribute("board", board);
 
-        return "board/reply";
+        return "board/detail";
 
     }
 
@@ -110,15 +115,17 @@ public class BoardController {
         return "board/searchResult";
     }
 
-    @PostMapping("comment")
-    public String saveComment(@RequestParam(value = "boardCode")String boardCode,
-                              @RequestParam(value = "commentContent")String commentContent){
+    @PostMapping("/comment")
+    public String saveComment(@RequestBody CommentDTO newComment){
+        boardService.commentNewPosting(newComment);
 
-        System.out.println("댓글 파라미터 값 ? : " + commentContent);
-        System.out.println("댓글 파라미터 값 ? : " + boardCode);
-       // List<CommentDTO> commentList = boardService.commentNewPosting(newComment);
+        return "redirect:/board/"+ newComment.getBoardCode();
+    }
 
+    @PostMapping("/commentDelete")
+    public String commentDelete(CommentDTO deletComment) {
+        boardService.commentDelete(deletComment);
 
-        return "";
+        return "redirect:/board/"+ deletComment.getBoardCode();
     }
 }

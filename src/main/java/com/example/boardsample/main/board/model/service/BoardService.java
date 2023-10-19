@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,6 +35,7 @@ public class BoardService {
         this.modelMapper = modelMapper;
         this.commentRepogitory = commentRepogitory;
     }
+    /* 게시글 등록*/
     @Transactional
     public void boardRegist(BoardDTO boardDTO) {
 
@@ -79,12 +81,13 @@ public class BoardService {
         board.setPostedDate(formatedNow);
 
     }
-
-    /* 게시글 제목 검색 (쿼리메소드)*/
+    /* 게시글 삭제 */
     @Transactional
     public void boardDelete(BoardDTO boardDelete) {
         boardRepogitory.deleteById(boardDelete.getBoardCode());
     }
+    /* 게시글 제목 검색 (쿼리메소드)*/
+    
     public List<BoardDTO> findByBoardSearchWord(String searchWord) {
 
         List<Board> boardList = boardRepogitory.findByTitleContaining(searchWord);
@@ -96,9 +99,27 @@ public class BoardService {
         return boardList.stream().map(board -> modelMapper.map(board, BoardDTO.class)).collect(Collectors.toList());
     }
 
-    /*public List<CommentDTO> commentNewPosting(Map<String, Object> newComment) {
+    public List<CommentDTO> commentNewPosting(CommentDTO newComment) {
 
+        LocalDateTime now = LocalDateTime.now();
+        String formatedNow = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        newComment.setPostedDate(formatedNow);
 
-        List<Comment> comment = commentRepogitory.save()
-    }*/
+        List<Comment> comment = Collections.singletonList(commentRepogitory.save(modelMapper.map(newComment, Comment.class)));
+        System.out.println(comment);
+        return null;
+    }
+
+    /* 댓글 조회 */
+    public List<CommentDTO> findCommentList() {
+
+        List<Comment> commentList = commentRepogitory.findAll(Sort.by("commentCode").descending());
+        return commentList.stream().map(comment -> modelMapper.map(comment, CommentDTO.class)).collect(Collectors.toList());
+    }
+
+    /* 댓글 삭제 */
+    public void commentDelete(CommentDTO deletComment) {
+        commentRepogitory.deleteById(deletComment.getCommentCode());
+        
+    }
 }

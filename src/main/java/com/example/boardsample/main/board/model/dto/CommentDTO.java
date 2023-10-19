@@ -7,12 +7,12 @@ public class CommentDTO {
     private String commentContent;
     private String postedDate;
     private String deleteDate;
-    private Board boardCode;
+    private int boardCode;
 
     public CommentDTO() {
     }
 
-    public CommentDTO(int commentCode, String commentContent, String postedDate, String deleteDate, Board boardCode) {
+    public CommentDTO(int commentCode, String commentContent, String postedDate, String deleteDate, int boardCode) {
         this.commentCode = commentCode;
         this.commentContent = commentContent;
         this.postedDate = postedDate;
@@ -52,11 +52,11 @@ public class CommentDTO {
         this.deleteDate = deleteDate;
     }
 
-    public Board getBoardCode() {
+    public int getBoardCode() {
         return boardCode;
     }
 
-    public void setBoardCode(Board boardCode) {
+    public void setBoardCode(int boardCode) {
         this.boardCode = boardCode;
     }
 
