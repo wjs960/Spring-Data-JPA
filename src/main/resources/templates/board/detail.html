@@ -23,21 +23,32 @@
         <td><textarea th:text="${ board.boardContent }" readonly class="detailsBox"></textarea></td>
     </tr>
 </table>
-<!-- 답변 -->
-<table>
-    <input id="boardCode" type="hidden" name="boardCode" th:value="${ board.boardCode }">
-    <tr>
-        <td>답변</td>
-    </tr>
-    <tr>
-        <td>
-            <textarea></textarea>
-        </td>
-        <td>
-            <input type="submit" value="답변작성">
+<input type="hidden" id="boardCode" th:value="${board.boardCode}">
+<!-- 댓글 내용-->
+<div class="card">
+    <!-- 댓글 헤더-->
+    <div class="card-header">
+        <div>댓글작성</div>
+    </div>
 
-        </td>
-</table>
+    <!-- 댓글 내용 바디 -->
+    <div>
+        <!-- 댓글 정보 여기에 -->
+        <textarea id="commentContent" rows="1"></textarea>
+        <button id="insertComment" type="button" onclick="submitComment()">등록</button>
+    </div>
+</div>
+<br/>
+<div>
+    <div>댓글(<span>0</span>)</div>
+    <div th:each="comment : ${commentList}">
+        <span th:text="${comment.commentContent}"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span> 작성일시 :</span><span
+            th:text="${comment.postedDate}"></span>
+        <button id="insertComment1" type="button" onclick="deleteComment()">삭제</button>
+        <input id="commentBoardCode" type="hidden" name="commentBoardCode" th:value="${comment.boardCode}">
+        <input id="commentCode" type="hidden" name="commentCode" th:value="${comment.commentCode}">
+    </div>
+</div>
 <button onclick="location.href='/main'">돌아가기</button>
 <button type="submit" onclick="modifyButton()">수정하기</button>
 <button type="submit" onclick="deleteButton()">삭제하기</button>
@@ -65,7 +76,64 @@
         document.body.append(form);
         document.getElementById('deleteForm').submit();
     };
+    const boardCode = document.getElementById("boardCode").value;
 
+    /* 댓글 등록 */
+    const submitComment = async () => {
+        const commentContent = document.getElementById("commentContent").value; // 댓글 내용을 가져옵니다.
+
+        console.log(boardCode);
+
+        console.log(commentContent);
+
+        try {
+            const response = await fetch('/board/comment', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify(
+                    {
+                        boardCode: boardCode,
+                        commentContent: commentContent
+                    }
+                )
+            })
+            if (response.ok) {
+                console.log('댓글이 작성되었습니다.');
+                window.location.href = '/board/' + boardCode
+            } else {
+                console.error('댓글 작성 실패');
+                // 댓글 작성 실패 처리할 로직 추가
+            }
+        }catch (error) {
+            console.error('오류 발생:', error);
+            // 오류 발생 시 처리할 로직 추가
+        }
+    };
+
+     /*댓글 삭제*/
+    function deleteComment (){
+
+        const commentCode = document.getElementById("commentCode").value;
+        const boardCode = document.getElementById("boardCode").value;
+        if(!confirm('정말로 게시글을 삭제하시겠습니까?')) {
+            return false;
+        }
+
+        const formHtml = `
+                    <form id="deleteForm" action="/board/commentDelete" method="post">
+                        <input type="hidden" name="commentCode" value="${commentCode}"/>
+                        <input type="hidden" name="boardCode" value="${boardCode}"/>
+                    </form>
+                `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        document.getElementById('deleteForm').submit();
+    };
+
+    /* 댓글 카운트 */
 
 </script>
 </body>

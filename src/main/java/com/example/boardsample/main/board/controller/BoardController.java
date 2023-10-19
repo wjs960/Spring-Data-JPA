@@ -1,6 +1,7 @@
 package com.example.boardsample.main.board.controller;
 
 import com.example.boardsample.main.board.model.dto.BoardDTO;
+import com.example.boardsample.main.board.model.dto.CommentDTO;
 import com.example.boardsample.main.board.model.service.BoardService;
 import com.example.boardsample.main.common.Pagenation;
 import com.example.boardsample.main.common.PagingButton;
@@ -9,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -34,9 +37,12 @@ public class BoardController {
     @GetMapping("{boardCode}")
     public String findBoardByCode(@PathVariable int boardCode, Model model) {
         BoardDTO board = boardService.findBoardByCode(boardCode);
+        List<CommentDTO> commentList = boardService.findCommentList(boardCode);
+
+        model.addAttribute("commentList", commentList);
         model.addAttribute("board", board);
 
-        return "board/reply";
+        return "board/detail";
 
     }
 
@@ -106,5 +112,20 @@ public class BoardController {
         model.addAttribute("boardList", boardList);
 
         return "board/searchResult";
+    }
+
+    @PostMapping("/comment")
+    public String saveComment(@RequestBody CommentDTO newComment){
+        boardService.commentNewPosting(newComment);
+
+        return "redirect:/board/"+ newComment.getBoardCode();
+    }
+
+    @PostMapping("/commentDelete")
+    public String commentDelete(CommentDTO deletComment) {
+        System.out.println(deletComment);
+        boardService.commentDelete(deletComment);
+
+        return "redirect:/board/"+ deletComment.getBoardCode();
     }
 }

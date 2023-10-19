@@ -1,7 +1,5 @@
 package com.example.boardsample.main.board.model.entity;
 
-import org.springframework.core.annotation.Order;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -25,9 +23,8 @@ public class Board {
     private String boardContent; // 게시글 내용
     @Column(name = "user_id")
     private String userId; // 유저 아이디
-    /*@OrderBy("commentCode desc")
-    @OneToMany(mappedBy = "boardCode", fetch = FetchType.EAGER)
-    private List<Comment> commentList;*/
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    private List<Comment> commentList;
 
     protected Board() {}
 

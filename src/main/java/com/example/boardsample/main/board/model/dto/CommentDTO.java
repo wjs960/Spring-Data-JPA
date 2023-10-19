@@ -1,33 +1,23 @@
-package com.example.boardsample.main.board.model.entity;
+package com.example.boardsample.main.board.model.dto;
 
-import javax.persistence.*;
+import com.example.boardsample.main.board.model.entity.Board;
 
-@Entity
-@Table(name = "comment")
-public class Comment {
-    @Id
-    @Column(name = "comment_code")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CommentDTO {
     private int commentCode;
-    @Column(name = "comment_content",columnDefinition = "TEXT", nullable = false)
     private String commentContent;
-    @Column(name = "posted_date")
     private String postedDate;
-    @Column(name = "delete_date")
     private String deleteDate;
-    @ManyToOne
-    @JoinColumn(name = "board_code")
-    private Board board;
+    private int boardCode;
 
-    protected Comment() {
+    public CommentDTO() {
     }
 
-    public Comment(int commentCode, String commentContent, String postedDate, String deleteDate, Board board) {
+    public CommentDTO(int commentCode, String commentContent, String postedDate, String deleteDate, int boardCode) {
         this.commentCode = commentCode;
         this.commentContent = commentContent;
         this.postedDate = postedDate;
         this.deleteDate = deleteDate;
-        this.board = board;
+        this.boardCode = boardCode;
     }
 
     public int getCommentCode() {
@@ -62,22 +52,22 @@ public class Comment {
         this.deleteDate = deleteDate;
     }
 
-    public Board getBoard() {
-        return board;
+    public int getBoardCode() {
+        return boardCode;
     }
 
-    public void setBoard(Board boardCode) {
-        this.board = boardCode;
+    public void setBoardCode(int boardCode) {
+        this.boardCode = boardCode;
     }
 
     @Override
     public String toString() {
-        return "Comment{" +
+        return "CommentDTO{" +
                 "commentCode=" + commentCode +
                 ", commentContent='" + commentContent + '\'' +
                 ", postedDate='" + postedDate + '\'' +
                 ", deleteDate='" + deleteDate + '\'' +
-                ", boardCode=" + board +
+                ", boardCode=" + boardCode +
                 '}';
     }
 }
