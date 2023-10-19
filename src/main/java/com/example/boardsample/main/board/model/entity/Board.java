@@ -24,7 +24,6 @@ public class Board {
     @Column(name = "user_id")
     private String userId; // 유저 아이디
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
-    @OrderBy("commentCode DESC") // 정렬 방식을 지정합니다.
     private List<Comment> commentList;
 
     protected Board() {}

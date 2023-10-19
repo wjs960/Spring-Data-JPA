@@ -42,13 +42,11 @@
 <div>
     <div>댓글(<span>0</span>)</div>
     <div th:each="comment : ${commentList}">
-        No:<span th:text="${comment.commentCode}"></span>
-        <span th:text="${comment.getCommentContent()}"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span> 작성일시 :</span><span
-            th:text="${comment.getPostedDate()}"></span>
-        <button>수정</button>
-        <span> | </span>
-        <button id="insertComment1" type="button" onclick="insertComment1()">삭제</button>
-        <input id="commentCode" type="hidden" name="commentCode" th:value="${ comment.getBoardCode() }">
+        <span th:text="${comment.commentContent}"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span> 작성일시 :</span><span
+            th:text="${comment.postedDate}"></span>
+        <button id="insertComment1" type="button" onclick="deleteComment()">삭제</button>
+        <input id="commentBoardCode" type="hidden" name="commentBoardCode" th:value="${comment.boardCode}">
+        <input id="commentCode" type="hidden" name="commentCode" th:value="${comment.commentCode}">
     </div>
 </div>
 <button onclick="location.href='/main'">돌아가기</button>
@@ -115,16 +113,18 @@
     };
 
      /*댓글 삭제*/
-    function insertComment1 (){
+    function deleteComment (){
 
-        const commentCode = '[[${comment.commentCode}]]';
-        if(!confirm('정말로 댓글을 삭제하시겠습니까?')) {
+        const commentCode = document.getElementById("commentCode").value;
+        const boardCode = document.getElementById("boardCode").value;
+        if(!confirm('정말로 게시글을 삭제하시겠습니까?')) {
             return false;
         }
 
         const formHtml = `
                     <form id="deleteForm" action="/board/commentDelete" method="post">
-                        <input type="hidden" id="commentCode" name="commentCode" value="${commentCode}"/>
+                        <input type="hidden" name="commentCode" value="${commentCode}"/>
+                        <input type="hidden" name="boardCode" value="${boardCode}"/>
                     </form>
                 `;
         const doc = new DOMParser().parseFromString(formHtml, 'text/html');
@@ -132,6 +132,8 @@
         document.body.append(form);
         document.getElementById('deleteForm').submit();
     };
+
+    /* 댓글 카운트 */
 
 </script>
 </body>

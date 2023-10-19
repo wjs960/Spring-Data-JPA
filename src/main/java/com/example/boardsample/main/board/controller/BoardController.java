@@ -37,8 +37,7 @@ public class BoardController {
     @GetMapping("{boardCode}")
     public String findBoardByCode(@PathVariable int boardCode, Model model) {
         BoardDTO board = boardService.findBoardByCode(boardCode);
-        List<CommentDTO> commentList = boardService.findCommentList();
-        System.out.println(commentList);
+        List<CommentDTO> commentList = boardService.findCommentList(boardCode);
 
         model.addAttribute("commentList", commentList);
         model.addAttribute("board", board);
@@ -124,6 +123,7 @@ public class BoardController {
 
     @PostMapping("/commentDelete")
     public String commentDelete(CommentDTO deletComment) {
+        System.out.println(deletComment);
         boardService.commentDelete(deletComment);
 
         return "redirect:/board/"+ deletComment.getBoardCode();

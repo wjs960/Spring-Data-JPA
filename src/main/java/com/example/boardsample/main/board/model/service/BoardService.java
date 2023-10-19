@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,7 +62,7 @@ public class BoardService {
     /* 게시글 상세 조회 */
     public BoardDTO findBoardByCode(int boardCode) {
 
-        Board board = boardRepogitory.findById(boardCode).orElseThrow();
+        Board board = boardRepogitory.findById(boardCode).orElseThrow(NoSuchElementException::new);
 
         return modelMapper.map(board, BoardDTO.class);
     }
@@ -111,13 +112,14 @@ public class BoardService {
     }
 
     /* 댓글 조회 */
-    public List<CommentDTO> findCommentList() {
+    public List<CommentDTO> findCommentList(int boardCode) {
 
-        List<Comment> commentList = commentRepogitory.findAll(Sort.by("commentCode").descending());
+        List<Comment> commentList = commentRepogitory.findAllCommnetByCode(boardCode);
         return commentList.stream().map(comment -> modelMapper.map(comment, CommentDTO.class)).collect(Collectors.toList());
     }
 
     /* 댓글 삭제 */
+    @Transactional
     public void commentDelete(CommentDTO deletComment) {
         commentRepogitory.deleteById(deletComment.getCommentCode());
         
